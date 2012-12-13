@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -16,8 +17,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import Book.BookPanel;
+import Book.CatalogAddPanel;
 import Book.DeleteBookPanel;
+import Book.DirectoryPO;
 import Book.ModifyBookPanel;
+import ClientRunner.Agent;
+import ClientRunner.Const;
+import RMI.ResultMessage;
 import User.AdminPanel.tableModel;
 
 @SuppressWarnings("serial")
@@ -75,6 +81,10 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 	private JButton addClassifyButton;
 	private JButton delClassifyButton;
 	private JButton modClassifyButton;
+	private JButton ensureAddCatalogButton;
+	private JButton ensureModCatalogButton;
+	private JButton ensureDelCatalogButton;
+	private CatalogAddPanel catalogAddPanel;
 	
 
 	public SalesManagerPanel(UserUIController userUIController) {
@@ -473,6 +483,32 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		addClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		addClassifyButton.setLocation(10, 15);
 		
+		ensureAddCatalogButton = new JButton("添加");
+		ensureAddCatalogButton.setSize(80, 40);
+		ensureAddCatalogButton.setFocusable(false);
+		ensureAddCatalogButton.setEnabled(false);
+		ensureAddCatalogButton.setVisible(false);
+		ensureAddCatalogButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
+		ensureAddCatalogButton.setLocation(550, 38);
+		ensureAddCatalogButton.addActionListener(this);
+		
+		addClassifyButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(catalogAddPanel == null){
+					catalogAddPanel = new CatalogAddPanel(userUIController.getMainFrame().getBookUIController());
+					catalogAddPanel.init();
+				}
+				ensureAddCatalogButton.setEnabled(true);
+				ensureAddCatalogButton.setVisible(true);
+				catalogAddPanel.setLocation(100, 25);
+				catalogManagePanel.add(catalogAddPanel);
+				catalogManagePanel.add(ensureAddCatalogButton);
+			}
+		});
+		
+		
 		delClassifyButton = new JButton("删除类别");
 		delClassifyButton.setSize(130, 40);
 		delClassifyButton.setFocusable(false);
@@ -484,8 +520,6 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		modClassifyButton.setFocusable(false);
 		modClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		modClassifyButton.setLocation(10, 175);
-		
-		
 		
 		catalogManagePanel.add(addClassifyButton);
 		catalogManagePanel.add(delClassifyButton);
@@ -544,6 +578,7 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == inputButton){
@@ -557,6 +592,30 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		}else if(e.getSource() == ensureDelButton){
 			
 		}else if(e.getSource() == ensureDelButton){
+			
+		}else if(e.getSource() == ensureAddCatalogButton){
+			String catalog_name = catalogAddPanel.getCatalog().trim();
+			
+			if(catalog_name.length() > 0){
+				try {
+					ResultMessage resultMessage = Agent.bookService.addDirectory(new DirectoryPO(-1, catalog_name));
+					if(resultMessage.isInvokeSuccess()){
+						System.out.println("success");
+					}
+					else{
+						System.out.println(resultMessage.getPostScript());
+					}
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
+			}
+			else{
+				System.out.println("empty");
+			}
+			catalogAddPanel.clear();
+		}else if(e.getSource() == ensureModCatalogButton){
+			
+		}else if(e.getSource() == ensureModCatalogButton){
 			
 		}
 	}

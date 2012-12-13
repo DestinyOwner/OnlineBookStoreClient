@@ -178,6 +178,7 @@ public class BookPanel extends JPanel {
 		}
 		bookType.setSize(120, 30);
 		bookType.setFont(new Font("Ώ¬Με_gb2312", Font.PLAIN, 18));
+		bookType.setFocusable(false);
 		bookType.setLocation(115, 325);
 
 		descriptionArea = new JTextArea();
