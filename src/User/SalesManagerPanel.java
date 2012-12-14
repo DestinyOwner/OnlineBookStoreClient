@@ -16,22 +16,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import Book.BookPO;
 import Book.BookPanel;
 import Book.CatalogAddPanel;
+import Book.CatalogDelPanel;
+import Book.CatalogModPanel;
 import Book.DeleteBookPanel;
 import Book.DirectoryPO;
 import Book.ModifyBookPanel;
 import ClientRunner.Agent;
-import ClientRunner.Const;
 import RMI.ResultMessage;
 import User.AdminPanel.tableModel;
 
 @SuppressWarnings("serial")
 public class SalesManagerPanel extends JPanel implements MouseListener,
 		ActionListener {
-	
+
 	private UserUIController userUIController;
-	
+
 	// main page
 	private JLabel obsLabel, welcomLabel, exitLabel;
 	tableModel tableModel;
@@ -41,7 +43,7 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 			bookclassifyLabel;
 	private JPanel cusinfoPanel, orderPanel, promotionPanel, bookPanel,
 			catalogManagePanel;
-	
+
 	// customer information
 	private JLabel inputLabel;
 	private JTextField nameField;
@@ -66,17 +68,18 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 	private boolean isDiscountBond = false;
 	private JButton ensureButton;
 
-	//book management
+	// book management
 	private JButton addBookButton;
 	private JButton deleteBookButton;
 	private JButton modifyBookButton;
 	private BookPanel addBookPanel = null;
 	private DeleteBookPanel deleteBookPanel = null;
 	private ModifyBookPanel modifyBookPanel = null;
+	private JButton searchButton;
 	private JButton ensureAddButton;
 	private JButton ensureDelButton;
 	private JButton ensureModButton;
-	
+
 	// book classify
 	private JButton addClassifyButton;
 	private JButton delClassifyButton;
@@ -85,7 +88,8 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 	private JButton ensureModCatalogButton;
 	private JButton ensureDelCatalogButton;
 	private CatalogAddPanel catalogAddPanel;
-	
+	private CatalogDelPanel catalogDelPanel;
+	private CatalogModPanel catalogModPanel;
 
 	public SalesManagerPanel(UserUIController userUIController) {
 		this.userUIController = userUIController;
@@ -182,7 +186,7 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		inputButton.setFocusable(false);
 		inputButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		inputButton.setLocation(360, 15);
-		
+
 		inputButton.addActionListener(this);
 
 		cusinfoPanel.add(inputLabel);
@@ -193,25 +197,25 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 
 	public void initorderView() {
 		orderPanel = initPanel(orderPanel);
-		
+
 		orderNumber = new JLabel("请输入所要查询的订单号:");
 		orderNumber.setSize(230, 40);
 		orderNumber.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		orderNumber.setLocation(40, 15);
-		
+
 		orderNumberField = new JTextField();
 		orderNumberField.setSize(180, 40);
 		orderNumberField.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		orderNumberField.setLocation(275, 15);
-		
+
 		queryButton = new JButton("查找");
 		queryButton.setSize(80, 40);
 		queryButton.setFocusable(false);
 		queryButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		queryButton.setLocation(460, 15);
-		
+
 		queryButton.addActionListener(this);
-		
+
 		orderPanel.add(orderNumber);
 		orderPanel.add(orderNumberField);
 		orderPanel.add(queryButton);
@@ -224,65 +228,65 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		bondLabel.setSize(320, 40);
 		bondLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		bondLabel.setLocation(40, 15);
-		
+
 		equiBond = new JRadioButton("等价券");
 		equiBond.setSize(100, 40);
 		equiBond.setFocusable(false);
 		equiBond.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		equiBond.setLocation(90, 55);
-		
+
 		discountBond = new JRadioButton("打折券");
 		discountBond.setSize(100, 40);
 		discountBond.setFocusable(false);
 		discountBond.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		discountBond.setLocation(220, 55);
-		
+
 		equiBondLabel = new JLabel("请输入所要赠送的等价券的面值:");
 		equiBondLabel.setSize(300, 30);
 		equiBondLabel.setVisible(false);
 		equiBondLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		equiBondLabel.setLocation(40, 100);
-		
+
 		equiBondField = new JTextField();
 		equiBondField.setSize(130, 30);
 		equiBondField.setVisible(false);
 		equiBondField.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		equiBondField.setLocation(345, 100);
-		
+
 		discountBondLabel = new JLabel("请输入所要赠送的打折券的折率:");
 		discountBondLabel.setSize(300, 30);
 		discountBondLabel.setVisible(false);
 		discountBondLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		discountBondLabel.setLocation(40, 100);
-		
+
 		discountBondField = new JTextField();
 		discountBondField.setSize(130, 30);
 		discountBondField.setVisible(false);
 		discountBondField.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		discountBondField.setLocation(345, 100);
-		
+
 		destCusNameLabel = new JLabel("请输入所要赠送的顾客的用户名:");
 		destCusNameLabel.setSize(300, 30);
 		destCusNameLabel.setVisible(false);
 		destCusNameLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		destCusNameLabel.setLocation(40, 140);
-		
+
 		destCusNameField = new JTextField();
 		destCusNameField.setSize(130, 30);
 		destCusNameField.setVisible(false);
 		destCusNameField.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		destCusNameField.setLocation(345, 140);
-		
+
 		ensureButton = new JButton("确认赠送");
 		ensureButton.setSize(120, 40);
 		ensureButton.setVisible(false);
 		ensureButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		ensureButton.setLocation(410, 180);
-		
+
 		ensureButton.addActionListener(this);
-		
+
 		equiBond.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				isEquiBond = true;
@@ -291,11 +295,11 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 				equiBondLabel.setVisible(isEquiBond);
 				equiBondField.setText("");
 				equiBondField.setVisible(isEquiBond);
-				
+
 				discountBondLabel.setVisible(isDiscountBond);
 				discountBondField.setText("");
 				discountBondField.setVisible(isDiscountBond);
-				
+
 				destCusNameLabel.setVisible(isEquiBond || isDiscountBond);
 				destCusNameField.setText("");
 				destCusNameField.setVisible(isEquiBond || isDiscountBond);
@@ -303,35 +307,34 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 				ensureButton.setVisible(isEquiBond || isDiscountBond);
 			}
 		});
-		
+
 		discountBond.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				isEquiBond = false;
 				isDiscountBond = true;
-				
+
 				equiBondLabel.setVisible(isEquiBond);
 				equiBondField.setText("");
 				equiBondField.setVisible(isEquiBond);
-				
+
 				discountBondLabel.setVisible(isDiscountBond);
 				discountBondField.setText("");
 				discountBondField.setVisible(isDiscountBond);
-				
+
 				destCusNameLabel.setVisible(isEquiBond || isDiscountBond);
 				destCusNameField.setText("");
 				destCusNameField.setVisible(isEquiBond || isDiscountBond);
-				
+
 				ensureButton.setVisible(isEquiBond || isDiscountBond);
 			}
 		});
-		
-		
+
 		ButtonGroup group = new ButtonGroup();
 		group.add(equiBond);
 		group.add(discountBond);
-		
+
 		promotionPanel.add(bondLabel);
 		promotionPanel.add(equiBond);
 		promotionPanel.add(discountBond);
@@ -346,19 +349,20 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 
 	public void initbookView() {
 		bookPanel = initPanel(bookPanel);
-		
+
 		addBookButton = new JButton("添加图书");
 		addBookButton.setSize(130, 40);
 		addBookButton.setFocusable(false);
 		addBookButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		addBookButton.setLocation(10, 15);
-		
-		addBookPanel = new BookPanel(userUIController.getMainFrame().getBookUIController());
+
+		addBookPanel = new BookPanel(userUIController.getMainFrame()
+				.getBookUIController());
 		addBookPanel.createNewBookView();
 		addBookPanel.enableModification();
 		addBookPanel.setVisible(false);
 		addBookPanel.setLocation(220, 10);
-		
+
 		ensureAddButton = new JButton("确认添加");
 		ensureAddButton.setSize(120, 40);
 		ensureAddButton.setFocusable(false);
@@ -367,17 +371,18 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		ensureAddButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		ensureAddButton.setLocation(600, 355);
 		ensureAddButton.addActionListener(this);
-		
+
 		deleteBookButton = new JButton("删除图书");
 		deleteBookButton.setSize(130, 40);
 		deleteBookButton.setFocusable(false);
 		deleteBookButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		deleteBookButton.setLocation(10, 95);
-		
-		deleteBookPanel = new DeleteBookPanel();
+
+		deleteBookPanel = new DeleteBookPanel(userUIController.getMainFrame()
+				.getBookUIController());
 		deleteBookPanel.setVisible(false);
 		deleteBookPanel.setLocation(220, 10);
-		
+
 		ensureDelButton = new JButton("确认删除");
 		ensureDelButton.setSize(120, 40);
 		ensureDelButton.setFocusable(false);
@@ -386,17 +391,25 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		ensureDelButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		ensureDelButton.setLocation(600, 355);
 		ensureDelButton.addActionListener(this);
-		
+
 		modifyBookButton = new JButton("修改图书");
 		modifyBookButton.setSize(130, 40);
 		modifyBookButton.setFocusable(false);
 		modifyBookButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		modifyBookButton.setLocation(10, 175);
-		
+
 		modifyBookPanel = new ModifyBookPanel();
 		modifyBookPanel.setVisible(false);
-		modifyBookPanel.setLocation(220, 10);
-		
+		modifyBookPanel.setLocation(510, 10);
+
+		searchButton = new JButton("查找图书");
+		searchButton.setSize(120, 40);
+		searchButton.setFocusable(false);
+		searchButton.setVisible(false);
+		searchButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
+		searchButton.setLocation(650, 90);
+		searchButton.addActionListener(this);
+
 		ensureModButton = new JButton("确认修改");
 		ensureModButton.setSize(120, 40);
 		ensureModButton.setFocusable(false);
@@ -405,64 +418,69 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		ensureModButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
 		ensureModButton.setLocation(600, 355);
 		ensureModButton.addActionListener(this);
-		
+
 		addBookButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				deleteBookPanel.setVisible(false);
 				ensureDelButton.setEnabled(false);
 				ensureDelButton.setVisible(false);
-				
+
 				modifyBookPanel.setVisible(false);
+				searchButton.setEnabled(false);
+				searchButton.setVisible(false);
 				ensureModButton.setEnabled(false);
 				ensureModButton.setVisible(false);
-				
+
 				addBookPanel.clear();
 				addBookPanel.setVisible(true);
 				ensureAddButton.setEnabled(true);
 				ensureAddButton.setVisible(true);
 			}
 		});
-		
+
 		deleteBookButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addBookPanel.setVisible(false);
 				ensureAddButton.setEnabled(false);
 				ensureAddButton.setVisible(false);
-				
+
 				modifyBookPanel.setVisible(false);
+				searchButton.setEnabled(false);
+				searchButton.setVisible(false);
 				ensureModButton.setEnabled(false);
 				ensureModButton.setEnabled(false);
-				
+
 				deleteBookPanel.clear();
 				deleteBookPanel.setVisible(true);
 				ensureDelButton.setEnabled(true);
 				ensureDelButton.setVisible(true);
 			}
 		});
-		
+
 		modifyBookButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addBookPanel.setVisible(false);
+				searchButton.setEnabled(true);
+				searchButton.setVisible(true);
 				ensureAddButton.setEnabled(false);
 				ensureAddButton.setVisible(false);
-				
+
 				deleteBookPanel.setVisible(false);
 				ensureDelButton.setEnabled(false);
 				ensureDelButton.setVisible(false);
-				
+
 				modifyBookPanel.clear();
 				modifyBookPanel.setVisible(true);
 				ensureModButton.setEnabled(true);
 				ensureModButton.setVisible(true);
 			}
 		});
-		
+
 		bookPanel.add(addBookButton);
 		bookPanel.add(deleteBookButton);
 		bookPanel.add(modifyBookButton);
@@ -471,18 +489,31 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		bookPanel.add(modifyBookPanel);
 		bookPanel.add(ensureAddButton);
 		bookPanel.add(ensureDelButton);
+		bookPanel.add(searchButton);
 		bookPanel.add(ensureModButton);
 	}
 
 	public void initbookClassifyView() {
 		catalogManagePanel = initPanel(catalogManagePanel);
-		
+
 		addClassifyButton = new JButton("添加类别");
 		addClassifyButton.setSize(130, 40);
 		addClassifyButton.setFocusable(false);
 		addClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		addClassifyButton.setLocation(10, 15);
-		
+
+		delClassifyButton = new JButton("删除类别");
+		delClassifyButton.setSize(130, 40);
+		delClassifyButton.setFocusable(false);
+		delClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
+		delClassifyButton.setLocation(10, 95);
+
+		modClassifyButton = new JButton("修改类别");
+		modClassifyButton.setSize(130, 40);
+		modClassifyButton.setFocusable(false);
+		modClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
+		modClassifyButton.setLocation(10, 175);
+
 		ensureAddCatalogButton = new JButton("添加");
 		ensureAddCatalogButton.setSize(80, 40);
 		ensureAddCatalogButton.setFocusable(false);
@@ -491,36 +522,115 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 		ensureAddCatalogButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
 		ensureAddCatalogButton.setLocation(550, 38);
 		ensureAddCatalogButton.addActionListener(this);
-		
+
+		ensureDelCatalogButton = new JButton("删除");
+		ensureDelCatalogButton.setSize(80, 40);
+		ensureDelCatalogButton.setFocusable(false);
+		ensureDelCatalogButton.setEnabled(false);
+		ensureDelCatalogButton.setVisible(false);
+		ensureDelCatalogButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
+		ensureDelCatalogButton.setLocation(550, 38);
+		ensureDelCatalogButton.addActionListener(this);
+
+		ensureModCatalogButton = new JButton("修改");
+		ensureModCatalogButton.setSize(80, 40);
+		ensureModCatalogButton.setFocusable(false);
+		ensureModCatalogButton.setEnabled(false);
+		ensureModCatalogButton.setVisible(false);
+		ensureModCatalogButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
+		ensureModCatalogButton.setLocation(550, 38);
+		ensureModCatalogButton.addActionListener(this);
+
 		addClassifyButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(catalogAddPanel == null){
-					catalogAddPanel = new CatalogAddPanel(userUIController.getMainFrame().getBookUIController());
+				if (catalogAddPanel == null) {
+					catalogAddPanel = new CatalogAddPanel(userUIController
+							.getMainFrame().getBookUIController());
 					catalogAddPanel.init();
+					catalogAddPanel.setLocation(100, 25);
+					catalogAddPanel.setVisible(false);
+					catalogManagePanel.add(catalogAddPanel);
+					catalogManagePanel.add(ensureAddCatalogButton);
 				}
+				if (catalogDelPanel != null) {
+					catalogDelPanel.setVisible(false);
+				}
+				if (catalogModPanel != null) {
+					catalogModPanel.setVisible(false);
+				}
+
+				ensureDelCatalogButton.setEnabled(false);
+				ensureDelCatalogButton.setVisible(false);
+				ensureModCatalogButton.setEnabled(false);
+				ensureModCatalogButton.setVisible(false);
+
+				catalogAddPanel.setVisible(true);
 				ensureAddCatalogButton.setEnabled(true);
 				ensureAddCatalogButton.setVisible(true);
-				catalogAddPanel.setLocation(100, 25);
-				catalogManagePanel.add(catalogAddPanel);
-				catalogManagePanel.add(ensureAddCatalogButton);
 			}
 		});
-		
-		
-		delClassifyButton = new JButton("删除类别");
-		delClassifyButton.setSize(130, 40);
-		delClassifyButton.setFocusable(false);
-		delClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
-		delClassifyButton.setLocation(10, 95);
-		
-		modClassifyButton = new JButton("修改类别");
-		modClassifyButton.setSize(130, 40);
-		modClassifyButton.setFocusable(false);
-		modClassifyButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 23));
-		modClassifyButton.setLocation(10, 175);
-		
+
+		delClassifyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (catalogDelPanel == null) {
+					catalogDelPanel = new CatalogDelPanel(userUIController
+							.getMainFrame().getBookUIController());
+					catalogDelPanel.init();
+					catalogDelPanel.setLocation(100, 25);
+					catalogDelPanel.setVisible(false);
+					catalogManagePanel.add(catalogDelPanel);
+					catalogManagePanel.add(ensureDelCatalogButton);
+				}
+				if (catalogAddPanel != null) {
+					catalogAddPanel.setVisible(false);
+					ensureAddCatalogButton.setEnabled(false);
+					ensureAddCatalogButton.setVisible(false);
+				}
+				if (catalogModPanel != null) {
+					catalogModPanel.setVisible(false);
+					ensureModCatalogButton.setEnabled(false);
+					ensureModCatalogButton.setVisible(false);
+				}
+
+				catalogDelPanel.setVisible(true);
+				ensureDelCatalogButton.setEnabled(true);
+				ensureDelCatalogButton.setVisible(true);
+			}
+		});
+
+		modClassifyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (catalogModPanel == null) {
+					catalogModPanel = new CatalogModPanel(userUIController
+							.getMainFrame().getBookUIController());
+					catalogModPanel.init();
+					catalogModPanel.setLocation(100, 25);
+					catalogModPanel.setVisible(false);
+					catalogManagePanel.add(catalogModPanel);
+					catalogManagePanel.add(ensureModCatalogButton);
+				}
+				if (catalogAddPanel != null) {
+					catalogAddPanel.setVisible(false);
+					ensureAddCatalogButton.setEnabled(false);
+					ensureAddCatalogButton.setVisible(false);
+				}
+				if (catalogDelPanel != null) {
+					catalogDelPanel.setVisible(false);
+					ensureDelCatalogButton.setEnabled(false);
+					ensureDelCatalogButton.setVisible(false);
+				}
+				catalogModPanel.setVisible(true);
+				ensureModCatalogButton.setEnabled(true);
+				ensureModCatalogButton.setVisible(true);
+			}
+		});
+
 		catalogManagePanel.add(addClassifyButton);
 		catalogManagePanel.add(delClassifyButton);
 		catalogManagePanel.add(modClassifyButton);
@@ -529,6 +639,11 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == exitLabel && e.getButton() == MouseEvent.BUTTON1) {
+			try {
+				Agent.userService.logout(Agent.userAgent);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 			userUIController.setMainPageView();
 		} else if (e.getSource() == cusInfoLabel
 				&& e.getButton() == MouseEvent.BUTTON1) {
@@ -578,45 +693,94 @@ public class SalesManagerPanel extends JPanel implements MouseListener,
 
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == inputButton){
-			
-		}else if(e.getSource() == queryButton){
-				
-		}else if(e.getSource() == ensureButton){
-			
-		}else if(e.getSource() == ensureAddButton){
-//			Agent.bookService.addBook(new BookPO(addBookPanel.getBookName(), addBookPanel.getisbn(), addBookPanel.getAuthor(), addBookPanel.getPress(), addBookPanel.getDescription(), , publishDate, price, specialPrice))
-		}else if(e.getSource() == ensureDelButton){
-			
-		}else if(e.getSource() == ensureDelButton){
-			
-		}else if(e.getSource() == ensureAddCatalogButton){
-			String catalog_name = catalogAddPanel.getCatalog().trim();
-			
-			if(catalog_name.length() > 0){
+		if (e.getSource() == inputButton) {
+
+		} else if (e.getSource() == queryButton) {
+
+		} else if (e.getSource() == ensureButton) {
+
+		} else if (e.getSource() == ensureAddButton) {
+			try {
+				ResultMessage resultMessage = Agent.bookService
+						.addBook(new BookPO(addBookPanel.getBookName(),
+								addBookPanel.getisbn(), addBookPanel
+										.getAuthor(), addBookPanel.getPress(),
+								addBookPanel.getDescription(), addBookPanel
+										.getDirectoryID(), addBookPanel
+										.getPublishDate(), addBookPanel
+										.getPrice(), addBookPanel
+										.getSpecialPrice()));
+				if (resultMessage.isInvokeSuccess()) {
+					System.out.println("success");
+					addBookPanel.clear();
+				} else {
+					System.out.println(resultMessage.getPostScript());
+					addBookPanel.clear();
+				}
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
+		} else if (e.getSource() == ensureDelButton) {
+			String isbn = deleteBookPanel.getDeleteBookISBN();
+			if (isbn.length() > 0) {
 				try {
-					ResultMessage resultMessage = Agent.bookService.addDirectory(new DirectoryPO(-1, catalog_name));
-					if(resultMessage.isInvokeSuccess()){
+					ResultMessage resultMessage = Agent.bookService
+							.deleteBook(isbn);
+					if (resultMessage.isInvokeSuccess()) {
 						System.out.println("success");
+					} else {
+						System.out.println(resultMessage.getPostScript());
 					}
-					else{
+				} catch (RemoteException re) {
+					re.printStackTrace();
+				}
+			}
+		} else if (e.getSource() == ensureModButton) {
+
+		} else if (e.getSource() == ensureAddCatalogButton) {
+			String catalog_name = catalogAddPanel.getCatalog().trim();
+			if (catalog_name.length() > 0) {
+				try {
+					ResultMessage resultMessage = Agent.bookService
+							.addDirectory(new DirectoryPO(-1, catalog_name));
+					if (resultMessage.isInvokeSuccess()) {
+						System.out.println("success");
+					} else {
 						System.out.println(resultMessage.getPostScript());
 					}
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				}
-			}
-			else{
+			} else {
 				System.out.println("empty");
 			}
 			catalogAddPanel.clear();
-		}else if(e.getSource() == ensureModCatalogButton){
-			
-		}else if(e.getSource() == ensureModCatalogButton){
-			
+		} else if (e.getSource() == ensureDelCatalogButton) {
+			try {
+				ResultMessage resultMessage = Agent.bookService
+						.deleteDirectory(catalogDelPanel.getDirectoryID());
+				if (resultMessage.isInvokeSuccess()) {
+					System.out.println("success");
+				} else {
+					System.out.println(resultMessage.getPostScript());
+				}
+			} catch (RemoteException re) {
+				re.printStackTrace();
+			}
+		} else if (e.getSource() == ensureModCatalogButton) {
+			try {
+				ResultMessage resultMessage = Agent.bookService
+						.modifyDirectory(catalogModPanel.getDirectoryPO());
+				if (resultMessage.isInvokeSuccess()) {
+					System.out.println("success");
+				} else {
+					System.out.println(resultMessage.getPostScript());
+				}
+			} catch (RemoteException re) {
+				re.printStackTrace();
+			}
 		}
 	}
 

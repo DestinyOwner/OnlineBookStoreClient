@@ -5,32 +5,54 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import ClientRunner.Agent;
+
+import RMI.ResultMessage;
 
 @SuppressWarnings("serial")
 public class MainpagePanel extends JPanel implements MouseListener {
 	
 	private BookUIController bookUIController;
 	
-	private String[] bookClassify = { "文学", "小说", "经济", "管理", "考试", "时尚", "少儿",
-			"旅游" };
-	private int size = bookClassify.length;
-	private MPBookClaPanel[] bcpanels = new MPBookClaPanel[size];
-
+	private String[] bookClassify;
+	private int size;
+	private MPBookClaPanel[] bcpanels;
+	
 	private RankPanel rankPanel;
 
 	public MainpagePanel(BookUIController bookUIController) {
 		this.bookUIController = bookUIController;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void init() {
+		try{
+			ResultMessage resultMessage = Agent.bookService.getAllDirectories();
+			ArrayList<DirectoryPO> list = resultMessage.getResultSet();
+			if(list != null){
+				size = list.size();
+				bookClassify = new String[size];
+				for(int i = 0; i < size; i ++){
+					bookClassify[i] = list.get(i).getName();
+					System.out.println(bookClassify[i]);
+				}
+				bcpanels = new MPBookClaPanel[size];
+			}
+		}catch (RemoteException re){
+			re.printStackTrace();
+		}
 		setSize(800, 540);
 		setLocation(5, 75);
 		setVisible(true);
 		setLayout(null);
+		
 		JPanel panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -39,6 +61,7 @@ public class MainpagePanel extends JPanel implements MouseListener {
 				g.fillRect(0, 0, 760, 1000);
 			}
 		};
+		
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(760, 1000));
 		for (int i = 0; i < size; i++) {

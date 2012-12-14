@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import ClientRunner.Agent;
 import User.AdminPanel.tableModel;
 
 @SuppressWarnings("serial")
@@ -24,11 +26,11 @@ public class GenManagerPanel extends JPanel implements MouseListener,
 	tableModel tableModel;
 	JTable resultTable;
 	JScrollPane resultPanel;
-	
-	//set promotion
+
+	// set promotion
 	JPanel setPromotionPanel;
-	
-	//deliver promotion
+
+	// deliver promotion
 
 	public GenManagerPanel(UserUIController userUIController) {
 		this.userUIController = userUIController;
@@ -43,25 +45,25 @@ public class GenManagerPanel extends JPanel implements MouseListener,
 		obsLabel.setLocation(240, 0);
 		obsLabel.setFont(new Font("楷体_gb2312", Font.BOLD, 30));
 		obsLabel.setSize(300, 80);
-		
+
 		welcomLabel = new JLabel("欢迎您，总经理");
 		welcomLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 18));
 		welcomLabel.setSize(150, 40);
 		welcomLabel.setLocation(560, 20);
-		
+
 		exitLabel = new JLabel("退出");
 		exitLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 18));
 		exitLabel.setSize(80, 40);
 		exitLabel.setLocation(720, 20);
 		exitLabel.addMouseListener(this);
-		
+
 		addProButton = new JButton("设置优惠券");
 		addProButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 18));
 		addProButton.setFocusable(false);
 		addProButton.setSize(130, 40);
 		addProButton.setLocation(30, 150);
 		addProButton.addActionListener(this);
-		
+
 		deliverButton = new JButton("赠送优惠券");
 		deliverButton.setFont(new Font("楷体_gb2312", Font.PLAIN, 18));
 		deliverButton.setFocusable(false);
@@ -90,9 +92,7 @@ public class GenManagerPanel extends JPanel implements MouseListener,
 	public void initaddProView() {
 		setPromotionPanel = new JPanel();
 		setPromotionPanel.setLayout(null);
-		
-		
-		
+
 	}
 
 	public void initdeliverView() {
@@ -110,7 +110,13 @@ public class GenManagerPanel extends JPanel implements MouseListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == exitLabel && e.getButton() == MouseEvent.BUTTON1) {
+		if (e.getSource() == exitLabel 
+				&& e.getButton() == MouseEvent.BUTTON1) {
+			try {
+				Agent.userService.logout(Agent.userAgent);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 			userUIController.setMainPageView();
 		}
 	}

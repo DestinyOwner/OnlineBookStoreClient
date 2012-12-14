@@ -825,6 +825,11 @@ public class AdminPanel extends JPanel implements ActionListener, MouseListener 
 			manageType = MANAGE_MANAGER;
 		} else if (e.getSource() == exitLabel
 				&& e.getButton() == MouseEvent.BUTTON1) {
+			try {
+				Agent.userService.logout(Agent.userAgent);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 			userUIController.setMainPageView();
 		}
 	}

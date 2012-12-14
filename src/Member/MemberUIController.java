@@ -34,7 +34,7 @@ public class MemberUIController {
 	}
 
 	public void setLoginView() {
-		loginPanel = new LoginPanel(this, Agent.memberService, Agent.userService);
+		loginPanel = new LoginPanel(this);
 		loginPanel.init();
 		mainFrame.clear();
 		mainFrame.add(loginPanel);

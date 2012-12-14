@@ -13,10 +13,6 @@ public class DeleteBookPanel extends JPanel{
 	private JLabel deleteBookISBNLabel;
 	private JTextField deleteBookISBNField;
 	
-	public DeleteBookPanel(){
-		init();
-	}
-	
 	public DeleteBookPanel(BookUIController bookUIController){
 		this.bookUIController = bookUIController;
 		init();

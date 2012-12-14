@@ -37,13 +37,9 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 	private MemberUIController memberUIController;
 	private UserUIController userUIController;
-	private MemberService memberService;
-	private UserService userService;
 	
-	public LoginPanel(MemberUIController memberUIController, MemberService memberService, UserService userService) {
+	public LoginPanel(MemberUIController memberUIController) {
 		this.memberUIController = memberUIController;
-		this.memberService = memberService;
-		this.userService = userService;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -144,14 +140,6 @@ public class LoginPanel extends JPanel implements ActionListener {
 		add(passwordWarning);
 		
 	}
-	
-	public MemberService getMemberService(){
-		return memberService;
-	}
-	
-	public UserService getUserService(){
-		return userService;
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -165,7 +153,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 					passwordWarning.setVisible(false);
 					if(classify.getSelectedIndex() == 0){
 						try {
-							ResultMessage resultMessage = memberService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
+							ResultMessage resultMessage = Agent.memberService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
 							if(resultMessage.isInvokeSuccess()){
 								memberUIController.setMainpageView();
 								memberUIController.setAfterLoginNavigate();
@@ -179,7 +167,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 					}
 					if(classify.getSelectedIndex() == 1){
 						try {
-							ResultMessage resultMessage = userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
+							ResultMessage resultMessage = Agent.userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
 							if(resultMessage.isInvokeSuccess()){
 								memberUIController.hideNavigateView();
 								MainFrame mainFrame = memberUIController.getMainFrame();
@@ -195,7 +183,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 					}
 					if(classify.getSelectedIndex() == 2){
 						try {
-							ResultMessage resultMessage = userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
+							ResultMessage resultMessage = Agent.userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
 							if(resultMessage.isInvokeSuccess()){
 								memberUIController.hideNavigateView();
 								MainFrame mainFrame = memberUIController.getMainFrame();
@@ -211,7 +199,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 					}
 					if(classify.getSelectedIndex() == 3){
 						try {
-							ResultMessage resultMessage = userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
+							ResultMessage resultMessage = Agent.userService.login(login_name, new String(password), InetAddress.getLocalHost().getHostAddress());
 							if(resultMessage.isInvokeSuccess()){
 								memberUIController.hideNavigateView();
 								MainFrame mainFrame = memberUIController.getMainFrame();

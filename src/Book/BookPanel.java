@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,7 +29,7 @@ public class BookPanel extends JPanel {
 	private JTextField nameField, isbnField, authorField, pressField,
 			publishDateYearField, publishDateMonthField, publishDateDateField,
 			priceField, specialPriceField;
-	private JComboBox<String> bookType;
+	private DirectoryComBox bookType;
 
 	private JTextArea descriptionArea;
 
@@ -161,16 +160,14 @@ public class BookPanel extends JPanel {
 		dateLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 18));
 		dateLabel.setLocation(300, 280);
 
+		bookType = new DirectoryComBox();
 		try {
 			ResultMessage resultMessage = Agent.bookService.getAllDirectories();
-			bookType = new JComboBox<String>();
 			@SuppressWarnings("unchecked")
 			ArrayList<DirectoryPO> list = resultMessage.getResultSet();
-			if (list == null) {
-
-			} else {
+			if (list != null){
 				for (int i = 0; i < list.size(); i++) {
-					bookType.addItem(list.get(i).getName());
+					bookType.addItem(list.get(i));
 				}
 			}
 		} catch (RemoteException re) {
@@ -243,8 +240,8 @@ public class BookPanel extends JPanel {
 		publishDateDateField.setText("12");
 		priceField.setText("36.1");
 		specialPriceField.setText("36.1");
-		bookType.addItem("科幻");
-		bookType.addItem("科技");
+//		bookType.addItem("科幻");
+//		bookType.addItem("科技");
 		bookType.setSelectedIndex(1);
 		descriptionArea.setText("畅销书籍");
 
@@ -286,12 +283,16 @@ public class BookPanel extends JPanel {
 
 	}
 
-	public String getPrice() {
-		return priceField.getText().trim();
+	public int getDirectoryID(){
+		return ((DirectoryPO)bookType.getSelectedItem()).getID();
+	}
+	
+	public double getPrice() {
+		return Double.parseDouble(priceField.getText().trim());
 	}
 
-	public String getSpecialPrice() {
-		return specialPriceField.getText().trim();
+	public double getSpecialPrice() {
+		return Double.parseDouble(specialPriceField.getText().trim());
 	}
 
 	public String getDescription() {

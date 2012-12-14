@@ -24,18 +24,18 @@ public class ModifyBookPanel extends JPanel{
 	}
 	
 	public void init(){
-		setSize(350, 500);
+		setSize(282, 70);
 		setLayout(null);
 		
-		modifyBookISBNLabel = new JLabel("请输入所要修改的图书的ISBN:");
+		modifyBookISBNLabel = new JLabel("输入所要修改的图书的ISBN:");
 		modifyBookISBNLabel.setSize(280, 30);
 		modifyBookISBNLabel.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
-		modifyBookISBNLabel.setLocation(10, 100);
+		modifyBookISBNLabel.setLocation(0, 0);
 		
 		modifyBookISBNField = new JTextField();
 		modifyBookISBNField.setSize(180, 30);
 		modifyBookISBNField.setFont(new Font("楷体_gb2312", Font.PLAIN, 20));
-		modifyBookISBNField.setLocation(50, 160);
+		modifyBookISBNField.setLocation(5, 35);
 		
 		add(modifyBookISBNLabel);
 		add(modifyBookISBNField);

@@ -201,7 +201,8 @@ public class NavigatePanel extends JPanel implements ActionListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == loginLabel && e.getButton() == MouseEvent.BUTTON1) {
+		if (e.getSource() == loginLabel 
+				&& e.getButton() == MouseEvent.BUTTON1) {
 			memberUIController.setLoginView();
 		} else if (e.getSource() == registerLabel
 				&& e.getButton() == MouseEvent.BUTTON1) {
@@ -220,6 +221,11 @@ public class NavigatePanel extends JPanel implements ActionListener,
 			memberUIController.setInforView();
 		} else if (e.getSource() == exitLabel
 				&& e.getButton() == MouseEvent.BUTTON1) {
+			try {
+				Agent.memberService.logout(Agent.userAgent);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 			memberUIController.setMainpageView();
 			this.init(BEFORE_STATE);
 		}
